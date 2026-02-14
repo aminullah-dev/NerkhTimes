@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about_text">نرخ ټایمز یو اپ دی چې د افغانستان د ښارونو ورځني نرخونه ښيي.</string>
+    <string name="about_title">زموږ په اړه</string>
+    <string name="app_name">NerkhTimes</string>
+    <string name="app_subtitle">د بازار تازه نرخونه</string>
+    <string name="btn_chart">چارت</string>
+    <string name="btn_food">خوراکي توکې</string>
+    <string name="btn_gems">قیمتي ډبرې</string>
+    <string name="btn_metals">قیمتي زر</string>
+    <string name="btn_son">د سون توکي</string>
+    <string name="chart_data_low">ډاټا کمه ده</string>
+    <string name="chart_empty">History کې ډاټا نشته</string>
+    <string name="chart_empty_hint">تلګرام/شیت ته څو ځل نرخ واستوئ، بیا دلته Candle جوړېږي.</string>
+    <string name="chart_header_sub">د ښار او توکي انتخاب وکړئ، بیا چارت وګورئ.</string>
+    <string name="chart_header_title">چارت</string>
+    <string name="chart_last">وروستی:</string>
+    <string name="chart_loading">ډاټا رااخلو…</string>
+    <string name="city_picker_label">د ښارونو لېست</string>
+    <string name="contact_text">د اړیکې لپاره: aminhashemi979@gmail.com</string>
+    <string name="contact_title">اړیکه</string>
+    <string name="error_prefix">خطا:</string>
+    <string name="home_title">نن بازار داسې دی</string>
+    <string name="label_asset">توکی</string>
+    <string name="label_tf">وخت</string>
+    <string name="last_update">وروستی اپډېټ:</string>
+    <string name="menu_about">کاریال په اړه</string>
+    <string name="menu_contact">اړیکه</string>
+    <string name="menu_exit">وتل</string>
+    <string name="menu_home">کور</string>
+    <string name="menu_share">کاریال استول</string>
+    <string name="no_data">معلومات نشته</string>
+    <string name="refresh">تازه کول</string>
+    <string name="retry">بیا هڅه</string>
+    <style name="Theme.NerkhTimes" parent="@android:style/Theme.DeviceDefault.NoActionBar"/>
+</resources>
