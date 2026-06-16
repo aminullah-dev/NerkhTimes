@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -53,7 +54,7 @@ fun RootApp(vm: MarketViewModel) {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, shareText)
         }
-        ctx.startActivity(Intent.createChooser(intent, "کاریال استول"))
+        ctx.startActivity(Intent.createChooser(intent, stringResource(R.string.menu_share)))
     }
 
     fun exitApp() {
@@ -62,15 +63,16 @@ fun RootApp(vm: MarketViewModel) {
     }
 
     val topTitle = when (route) {
-        NavRoutes.HOME -> "کور"
-        NavRoutes.CONTACT -> "اړیکه"
-        NavRoutes.ABOUT -> "کاریال په اړه"
-        NavRoutes.METALS -> "قیمتي زر"
-        NavRoutes.GEMS -> "قیمتي ډبرې"
-        NavRoutes.FOOD -> "خوراکي توکې"
-        NavRoutes.SON -> "د سون توکي"
-        NavRoutes.CHART -> "چارت"
-        else -> "NerkhTimes"
+        NavRoutes.HOME     -> stringResource(R.string.menu_home)
+        NavRoutes.CONTACT  -> stringResource(R.string.menu_contact)
+        NavRoutes.ABOUT    -> stringResource(R.string.menu_about)
+        NavRoutes.CURRENCY -> stringResource(R.string.menu_currency)
+        NavRoutes.METALS   -> stringResource(R.string.btn_metals)
+        NavRoutes.GEMS     -> stringResource(R.string.btn_gems)
+        NavRoutes.FOOD     -> stringResource(R.string.btn_food)
+        NavRoutes.SON      -> stringResource(R.string.btn_son)
+        NavRoutes.CHART    -> stringResource(R.string.btn_chart)
+        else               -> stringResource(R.string.app_name)
     }
 
     ModalNavigationDrawer(
@@ -79,14 +81,14 @@ fun RootApp(vm: MarketViewModel) {
             ModalDrawerSheet(modifier = Modifier.widthIn(max = 320.dp)) {
                 Column(Modifier.padding(16.dp)) {
                     Text(
-                        text = "NerkhTimes",
+                        text = stringResource(R.string.app_name),
                         style = MaterialTheme.typography.titleLarge,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        text = "د بازار تازه نرخونه",
+                        text = stringResource(R.string.app_subtitle),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -95,7 +97,7 @@ fun RootApp(vm: MarketViewModel) {
                 HorizontalDivider()
 
                 NavigationDrawerItem(
-                    label = { Text("کور") },
+                    label = { Text(stringResource(R.string.menu_home)) },
                     selected = route == NavRoutes.HOME,
                     onClick = { go(NavRoutes.HOME) },
                     icon = { Icon(Icons.Default.Home, contentDescription = null) },
@@ -103,7 +105,15 @@ fun RootApp(vm: MarketViewModel) {
                 )
 
                 NavigationDrawerItem(
-                    label = { Text("اړیکه") },
+                    label = { Text(stringResource(R.string.menu_currency)) },
+                    selected = route == NavRoutes.CURRENCY,
+                    onClick = { go(NavRoutes.CURRENCY) },
+                    icon = { Icon(Icons.Default.CurrencyExchange, contentDescription = null) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+
+                NavigationDrawerItem(
+                    label = { Text(stringResource(R.string.menu_contact)) },
                     selected = route == NavRoutes.CONTACT,
                     onClick = { go(NavRoutes.CONTACT) },
                     icon = { Icon(Icons.Default.Call, contentDescription = null) },
@@ -111,7 +121,7 @@ fun RootApp(vm: MarketViewModel) {
                 )
 
                 NavigationDrawerItem(
-                    label = { Text("کاریال په اړه") },
+                    label = { Text(stringResource(R.string.menu_about)) },
                     selected = route == NavRoutes.ABOUT,
                     onClick = { go(NavRoutes.ABOUT) },
                     icon = { Icon(Icons.Default.Info, contentDescription = null) },
@@ -121,7 +131,7 @@ fun RootApp(vm: MarketViewModel) {
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
                 NavigationDrawerItem(
-                    label = { Text("کاریال استول") },
+                    label = { Text(stringResource(R.string.menu_share)) },
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
@@ -132,7 +142,7 @@ fun RootApp(vm: MarketViewModel) {
                 )
 
                 NavigationDrawerItem(
-                    label = { Text("وتل") },
+                    label = { Text(stringResource(R.string.menu_exit)) },
                     selected = false,
                     onClick = { exitApp() },
                     icon = { Icon(Icons.Default.Logout, contentDescription = null) },

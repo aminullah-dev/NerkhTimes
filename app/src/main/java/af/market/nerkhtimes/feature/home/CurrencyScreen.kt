@@ -6,6 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 
 @Composable
-fun FoodScreen(padding: PaddingValues, vm: MarketViewModel) {
-    MarketListContent(padding = padding, vm = vm, group = "food")
+fun CurrencyScreen(padding: PaddingValues, vm: MarketViewModel) {
+    MarketListContent(padding = padding, vm = vm, group = "currency")
 }

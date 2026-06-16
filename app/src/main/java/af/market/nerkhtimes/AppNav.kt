@@ -19,6 +19,7 @@ fun AppNav(
         startDestination = NavRoutes.HOME
     ) {
         composable(NavRoutes.HOME) { HomeScreen(padding = padding, nav = nav, vm = vm) }
+        composable(NavRoutes.CURRENCY) { CurrencyScreen(padding = padding, vm = vm) }
         composable(NavRoutes.METALS) { GoldSilverScreen(padding = padding, vm = vm) }
         composable(NavRoutes.GEMS) { GemsScreen(padding = padding, vm = vm) }
         composable(NavRoutes.FOOD) { FoodScreen(padding = padding, vm = vm) }

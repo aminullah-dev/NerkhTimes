@@ -2,10 +2,12 @@ package af.market.nerkhtimes.feature.home
 
 import af.market.nerkhtimes.MarketViewModel
 import af.market.nerkhtimes.R
+import af.market.nerkhtimes.data.model.MarketItem
 import af.market.nerkhtimes.navigation.NavRoutes
 import af.market.nerkhtimes.ui.theme.components.CityPicker
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CurrencyExchange
 import androidx.compose.material.icons.filled.Diamond
 import androidx.compose.material.icons.filled.LocalGasStation
 import androidx.compose.material.icons.filled.Paid
@@ -16,11 +18,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun HomeScreen(
@@ -29,9 +35,14 @@ fun HomeScreen(
     vm: MarketViewModel
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
+    val nf = remember { NumberFormat.getNumberInstance(Locale.US) }
 
     val rawUpdate = state.currentCity()?.updated_at ?: ""
     val lastUpdate = remember(rawUpdate) { rawUpdate.cleanUpdateLabel() }
+
+    val currencyItems = remember(state.data, state.selectedCityId) {
+        state.currentCity()?.items?.filter { it.group == "currency" }.orEmpty()
+    }
 
     Column(
         modifier = Modifier
@@ -91,8 +102,15 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth(0.85f)
         )
 
+        if (currencyItems.isNotEmpty()) {
+            Spacer(Modifier.height(14.dp))
+            CurrencySummaryRow(items = currencyItems, nf = nf)
+        }
+
         Spacer(Modifier.height(18.dp))
 
+        MarketButton(stringResource(R.string.btn_currency), Icons.Default.CurrencyExchange) { nav.navigate(NavRoutes.CURRENCY) }
+        Spacer(Modifier.height(10.dp))
         MarketButton(stringResource(R.string.btn_metals), Icons.Default.Paid) { nav.navigate(NavRoutes.METALS) }
         Spacer(Modifier.height(10.dp))
         MarketButton(stringResource(R.string.btn_gems), Icons.Default.Diamond) { nav.navigate(NavRoutes.GEMS) }
@@ -106,9 +124,37 @@ fun HomeScreen(
 }
 
 @Composable
+private fun CurrencySummaryRow(items: List<MarketItem>, nf: NumberFormat) {
+    ElevatedCard(modifier = Modifier.fillMaxWidth(0.85f)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            items.forEach { item ->
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = nf.format(item.price),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = item.name_ps.ifBlank { item.key.uppercase() },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun MarketButton(
     title: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     onClick: () -> Unit
 ) {
     ElevatedCard(
