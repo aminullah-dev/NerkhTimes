@@ -53,8 +53,7 @@ fun CityPicker(
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             modifier = Modifier
                 .menuAnchor()
-                .fillMaxWidth()
-                .height(61.dp),
+                .fillMaxWidth(),
             maxLines = 1
         )
 

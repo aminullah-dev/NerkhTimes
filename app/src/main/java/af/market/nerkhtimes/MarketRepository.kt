@@ -1,24 +1,29 @@
 package af.market.nerkhtimes
 
+import android.content.Context
 import af.market.nerkhtimes.data.model.CandleResponse
 import af.market.nerkhtimes.data.model.MarketsResponse
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.Locale
 
-class MarketRepository {
+class MarketRepository(ctx: Context) {
 
-    private val api = ApiClient.api
+    private val api   = ApiClient.api
+    private val cache = CacheManager(ctx)
 
     suspend fun fetchMarkets(): MarketsResponse {
         return try {
-            api.getMarkets()
+            val res = api.getMarkets()
+            if (res.ok) cache.saveMarkets(res.data)
+            res
         } catch (e: Exception) {
-            MarketsResponse(
-                ok = false,
-                data = emptyList(),
-                error = humanError(e, fallback = "markets_error")
-            )
+            val cached = cache.loadMarkets()
+            if (cached != null) {
+                MarketsResponse(ok = true, data = cached, error = CACHE_SENTINEL)
+            } else {
+                MarketsResponse(ok = false, data = emptyList(), error = humanError(e, "markets_error"))
+            }
         }
     }
 
@@ -37,7 +42,7 @@ class MarketRepository {
                 key = key,
                 tf = tf,
                 candles = emptyList(),
-                error = humanError(e, fallback = "candles_error")
+                error = humanError(e, "candles_error")
             )
         }
     }
@@ -61,5 +66,9 @@ class MarketRepository {
         ) return if (farsi) "سرور پاسخ نامعتبر داد" else "Server returned HTML (check WebApp access)"
 
         return msg.ifBlank { fallback }
+    }
+
+    companion object {
+        const val CACHE_SENTINEL = "__cached__"
     }
 }

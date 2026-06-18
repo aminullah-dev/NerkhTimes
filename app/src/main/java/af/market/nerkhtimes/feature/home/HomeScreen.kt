@@ -220,6 +220,7 @@ private fun RateChip(item: MarketItem, nf: NumberFormat) {
         shape  = MaterialTheme.shapes.medium,
         color  = MaterialTheme.colorScheme.surface,
         shadowElevation = 2.dp,
+        tonalElevation  = 2.dp,
         modifier = Modifier.widthIn(min = 90.dp)
     ) {
         Column(
@@ -259,7 +260,7 @@ private fun CategoryCard(
 ) {
     ElevatedCard(
         onClick   = onClick,
-        modifier  = modifier.height(100.dp),
+        modifier  = modifier.heightIn(min = 100.dp),
         shape     = MaterialTheme.shapes.extraLarge,
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
     ) {
