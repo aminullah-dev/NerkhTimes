@@ -69,6 +69,7 @@ fun RootApp(vm: MarketViewModel) {
         NavRoutes.FOOD     -> stringResource(R.string.btn_food)
         NavRoutes.SON      -> stringResource(R.string.btn_son)
         NavRoutes.CHART    -> stringResource(R.string.btn_chart)
+        NavRoutes.LANGUAGE -> stringResource(R.string.menu_language)
         else               -> stringResource(R.string.app_name)
     }
 
@@ -126,6 +127,14 @@ fun RootApp(vm: MarketViewModel) {
                 )
 
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                NavigationDrawerItem(
+                    label = { Text(stringResource(R.string.menu_language)) },
+                    selected = route == NavRoutes.LANGUAGE,
+                    onClick = { go(NavRoutes.LANGUAGE) },
+                    icon = { Icon(Icons.Default.Language, contentDescription = null) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
 
                 NavigationDrawerItem(
                     label = { Text(stringResource(R.string.menu_share)) },
