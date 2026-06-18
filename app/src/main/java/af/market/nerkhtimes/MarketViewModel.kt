@@ -1,6 +1,7 @@
 package af.market.nerkhtimes
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import af.market.nerkhtimes.data.model.Candle
 import af.market.nerkhtimes.data.model.CityMarket
@@ -12,12 +13,14 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 data class MarketUiState(
     val loading: Boolean = false,
     val data: List<CityMarket> = emptyList(),
     val error: String? = null,
-    val selectedCityId: String = "kabul"
+    val selectedCityId: String = "kabul",
+    val isFromCache: Boolean = false
 ) {
     fun currentCity(): CityMarket? = data.firstOrNull { it.city_id == selectedCityId }
 }
@@ -30,9 +33,9 @@ data class CandleUiState(
     val tf: Int = 5
 )
 
-class MarketViewModel : ViewModel() {
+class MarketViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val repo = MarketRepository()
+    private val repo = MarketRepository(app.applicationContext)
 
     private val _state = MutableStateFlow(MarketUiState())
     val state: StateFlow<MarketUiState> = _state
@@ -44,6 +47,11 @@ class MarketViewModel : ViewModel() {
     private var marketsJob: Job? = null
     private var candlesJob: Job? = null
     private var autoStarted = false
+
+    init {
+        load()
+        startAutoRefresh(60)
+    }
 
     fun load() = refresh(silent = false)
 
@@ -62,17 +70,25 @@ class MarketViewModel : ViewModel() {
                 return@launch
             }
 
+            val useFarsi = Locale.getDefault().language == "fa"
+
             val fixed = res.data.map { city ->
                 val itemsFixed = city.items
-                    .map { it.mergeCatalog() }
+                    .map { it.mergeCatalog(useFarsi) }
                     .filter { it.price > 0.0 }
                 city.copy(items = itemsFixed)
             }
 
+            val cacheError = if (res.error == MarketRepository.CACHE_SENTINEL) {
+                if (useFarsi) "آفلاین — داده‌های قبلی نشان داده می‌شود"
+                else "آفلاین — زوړ معلومات ښودل کیږي"
+            } else null
+
             _state.value = _state.value.copy(
                 loading = false,
                 data = fixed,
-                error = null
+                error = cacheError,
+                isFromCache = res.error == MarketRepository.CACHE_SENTINEL
             )
         }
     }
@@ -132,12 +148,26 @@ class MarketViewModel : ViewModel() {
     }
 }
 
-private fun MarketItem.mergeCatalog(): MarketItem {
-    val meta = MarketCatalog.metaByKey[key.lowercase()]
-    return if (meta == null) this
-    else this.copy(
-        name_ps = if (name_ps.isBlank()) meta.name_ps else name_ps,
-        unit_ps = if (unit_ps.isBlank()) meta.unit_ps else unit_ps,
-        group = meta.group
+private fun MarketItem.mergeCatalog(useFarsi: Boolean = false): MarketItem {
+    val meta = MarketCatalog.metaByKey[key.lowercase()] ?: return this
+
+    val catalogName = if (useFarsi && meta.name_fa.isNotBlank()) meta.name_fa else meta.name_ps
+    val catalogUnit = if (useFarsi && meta.unit_fa.isNotBlank()) meta.unit_fa else meta.unit_ps
+
+    val resolvedName = when {
+        useFarsi          -> catalogName
+        name_ps.isBlank() -> catalogName
+        else              -> name_ps
+    }
+    val resolvedUnit = when {
+        useFarsi          -> catalogUnit
+        unit_ps.isBlank() -> catalogUnit
+        else              -> unit_ps
+    }
+
+    return this.copy(
+        name_ps = resolvedName,
+        unit_ps = resolvedUnit,
+        group   = meta.group
     )
 }

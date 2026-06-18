@@ -13,6 +13,7 @@ object ApiClient {
     private fun createClient(): OkHttpClient {
 
         val builder = OkHttpClient.Builder()
+            .callTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(25, TimeUnit.SECONDS)
             .readTimeout(25, TimeUnit.SECONDS)
             .writeTimeout(25, TimeUnit.SECONDS)
@@ -63,7 +64,7 @@ object ApiClient {
     val api: ApiService by lazy {
 
         Retrofit.Builder()
-            .baseUrl(ApiUrls.BASE_URL)
+            .baseUrl(BuildConfig.API_BASE_URL)
             .client(createClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

@@ -37,28 +37,27 @@ fun ChartScreen(
     padding: PaddingValues,
     vm: MarketViewModel
 ) {
-    val state = vm.state.collectAsStateWithLifecycle().value
+    val state  = vm.state.collectAsStateWithLifecycle().value
     val cState = vm.candleState.collectAsStateWithLifecycle().value
 
-    var key by remember { mutableStateOf("usd") }
-    var tf by remember { mutableStateOf(5) }
+    // key and tf live in the ViewModel so they survive configuration changes
+    val key = cState.key
+    val tf  = cState.tf
 
-    LaunchedEffect(state.selectedCityId, key, tf) {
-        vm.loadCandles(key = key, tf = tf, limit = 180)
+    // Load candles when city changes (initial load + city picker changes)
+    LaunchedEffect(state.selectedCityId) {
+        vm.loadCandles(key = key, tf = tf)
     }
 
-    val cityName = state.currentCity()?.city_name?.takeIf { it.isNotBlank() } ?: state.selectedCityId
-    val tfLabel = if (tf >= 60) "${tf / 60}h" else "${tf}m"
-    val keyLabel = key.uppercase()
+    val cityName  = state.currentCity()?.city_name?.takeIf { it.isNotBlank() } ?: state.selectedCityId
+    val tfLabel   = if (tf >= 60) "${tf / 60}h" else "${tf}m"
     val lastClose = cState.candles.lastOrNull()?.c
-
-    val scroll = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-            .verticalScroll(scroll)
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -85,17 +84,24 @@ fun ChartScreen(
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                CityPicker(
-                    selectedId = state.selectedCityId,
-                    onSelect = vm::selectCity
-                )
+                CityPicker(selectedId = state.selectedCityId, onSelect = vm::selectCity)
 
                 Row(
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Box(Modifier.weight(1f)) { KeyPicker(selected = key, onSelect = { key = it }) }
-                    Box(Modifier.weight(1f)) { TfPicker(selected = tf, onSelect = { tf = it }) }
+                    Box(Modifier.weight(1f)) {
+                        KeyPicker(
+                            selected = key,
+                            onSelect = { vm.loadCandles(key = it) }
+                        )
+                    }
+                    Box(Modifier.weight(1f)) {
+                        TfPicker(
+                            selected = tf,
+                            onSelect = { vm.loadCandles(tf = it) }
+                        )
+                    }
                 }
             }
         }
@@ -114,24 +120,19 @@ fun ChartScreen(
                 ) {
                     Column(Modifier.weight(1f)) {
                         Text(
-                            text = "$keyLabel — $cityName — $tfLabel",
+                            text = "${key.uppercase()} — $cityName — $tfLabel",
                             style = MaterialTheme.typography.titleMedium,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
-
-                        val sub = if (lastClose != null)
-                            "${stringResource(R.string.chart_last)} $lastClose"
-                        else " "
-
                         Text(
-                            text = sub,
+                            text = if (lastClose != null) "${stringResource(R.string.chart_last)} $lastClose" else " ",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
-                    IconButton(onClick = { vm.loadCandles(key = key, tf = tf, limit = 180) }) {
+                    IconButton(onClick = { vm.loadCandles(key = key, tf = tf) }) {
                         Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.refresh))
                     }
                 }
@@ -141,18 +142,15 @@ fun ChartScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     when {
-                        cState.loading -> LoadingState()
-
+                        cState.loading    -> LoadingState()
                         cState.error != null -> ErrorState(
-                            message = cState.error ?: stringResource(R.string.error_prefix),
-                            onRetry = { vm.loadCandles(key = key, tf = tf, limit = 180) }
+                            message = cState.error,
+                            onRetry = { vm.loadCandles(key = key, tf = tf) }
                         )
-
                         cState.candles.isEmpty() -> EmptyState(
-                            onRetry = { vm.loadCandles(key = key, tf = tf, limit = 180) },
+                            onRetry = { vm.loadCandles(key = key, tf = tf) },
                             hint = stringResource(R.string.chart_empty_hint)
                         )
-
                         else -> CandleChartView(candles = cState.candles)
                     }
                 }
@@ -224,21 +222,15 @@ private fun CandleChartView(candles: List<Candle>) {
 
     val entries = remember(sorted) {
         sorted.mapIndexed { index, c ->
-            CandleEntry(
-                index.toFloat(),
-                c.h.toFloat(),
-                c.l.toFloat(),
-                c.o.toFloat(),
-                c.c.toFloat()
-            )
+            CandleEntry(index.toFloat(), c.h.toFloat(), c.l.toFloat(), c.o.toFloat(), c.c.toFloat())
         }
     }
 
-    val scheme = MaterialTheme.colorScheme
-    val inc = scheme.primary.toArgb()
-    val dec = scheme.error.toArgb()
-    val neu = scheme.tertiary.toArgb()
-    val textColor = scheme.onSurfaceVariant.toArgb()
+    val scheme       = MaterialTheme.colorScheme
+    val inc          = scheme.primary.toArgb()
+    val dec          = scheme.error.toArgb()
+    val neu          = scheme.tertiary.toArgb()
+    val textColor    = scheme.onSurfaceVariant.toArgb()
     val gridColorInt = scheme.outlineVariant.toArgb()
 
     val xFormatter = remember(sorted) {
@@ -264,35 +256,28 @@ private fun CandleChartView(candles: List<Candle>) {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
-
                 description.isEnabled = false
-                legend.isEnabled = false
-
+                legend.isEnabled      = false
                 setTouchEnabled(true)
                 setPinchZoom(true)
                 isDoubleTapToZoomEnabled = true
-
                 setNoDataText(" ")
                 setNoDataTextColor(textColor)
-
                 axisRight.isEnabled = false
-
                 axisLeft.apply {
                     setDrawGridLines(true)
                     gridColor = gridColorInt
                     this.textColor = textColor
                     setLabelCount(6, true)
                 }
-
                 xAxis.apply {
                     position = XAxis.XAxisPosition.BOTTOM
                     setDrawGridLines(false)
                     this.textColor = textColor
-                    granularity = 1f
+                    granularity   = 1f
                     setLabelCount(4, true)
                     valueFormatter = xFormatter
                 }
-
                 setVisibleXRangeMaximum(40f)
             }
         },
@@ -300,25 +285,17 @@ private fun CandleChartView(candles: List<Candle>) {
             val dataSet = CandleDataSet(entries, "Price").apply {
                 setDrawValues(false)
                 setShadowWidth(1.2f)
-
                 setIncreasingColor(inc)
                 setIncreasingPaintStyle(Paint.Style.FILL)
-
                 setDecreasingColor(dec)
                 setDecreasingPaintStyle(Paint.Style.FILL)
-
                 setNeutralColor(neu)
             }
-
             chart.xAxis.valueFormatter = xFormatter
             chart.data = CandleData(dataSet)
-
             chart.notifyDataSetChanged()
             chart.invalidate()
-
-            if (entries.isNotEmpty()) {
-                chart.moveViewToX((entries.size - 1).toFloat())
-            }
+            if (entries.isNotEmpty()) chart.moveViewToX((entries.size - 1).toFloat())
         }
     )
 }
@@ -328,10 +305,6 @@ private fun CandleChartView(candles: List<Candle>) {
 private fun KeyPicker(selected: String, onSelect: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     val options = remember { MarketCatalog.allKeysForChart() }
-
-    LaunchedEffect(options) {
-        if (options.isNotEmpty() && selected !in options) onSelect(options.first())
-    }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -346,18 +319,11 @@ private fun KeyPicker(selected: String, onSelect: (String) -> Unit) {
             modifier = Modifier.menuAnchor().fillMaxWidth(),
             singleLine = true
         )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach { option ->
                 DropdownMenuItem(
                     text = { Text(option.uppercase()) },
-                    onClick = {
-                        expanded = false
-                        onSelect(option)
-                    }
+                    onClick = { expanded = false; onSelect(option) }
                 )
             }
         }
@@ -369,10 +335,6 @@ private fun KeyPicker(selected: String, onSelect: (String) -> Unit) {
 private fun TfPicker(selected: Int, onSelect: (Int) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     val options = listOf(5, 15, 30, 60, 240)
-
-    LaunchedEffect(Unit) {
-        if (selected !in options) onSelect(options.first())
-    }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -387,18 +349,11 @@ private fun TfPicker(selected: Int, onSelect: (Int) -> Unit) {
             modifier = Modifier.menuAnchor().fillMaxWidth(),
             singleLine = true
         )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach { t ->
                 DropdownMenuItem(
                     text = { Text(if (t >= 60) "${t / 60}h" else "${t}m") },
-                    onClick = {
-                        expanded = false
-                        onSelect(t)
-                    }
+                    onClick = { expanded = false; onSelect(t) }
                 )
             }
         }

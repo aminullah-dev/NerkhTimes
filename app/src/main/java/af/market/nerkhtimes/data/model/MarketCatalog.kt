@@ -1,17 +1,5 @@
 package af.market.nerkhtimes.data.model
 
-/**
- * Local catalog for:
- * 1) Grouping (currency / gold / stones / food / fuel)
- * 2) Localized names + units
- *
- * IMPORTANT:
- * - Keys must match what you store in Google Sheet (prices.key)
- * - This file also contains an alias map for backward compatibility.
- *
- * ✅ AFN pinned:
- *   Afghan Afghani symbol: ؋  (Code: AFN)
- */
 object MarketCatalog {
 
     private const val AFN = "؋"
@@ -19,45 +7,47 @@ object MarketCatalog {
     data class Meta(
         val key: String,
         val group: String,
-        val name_ps: String,
-        val unit_ps: String
+        val name_ps: String,   // Pashto
+        val unit_ps: String,
+        val name_fa: String = "",   // Dari/Farsi — empty → falls back to name_ps
+        val unit_fa: String = ""    // Dari/Farsi unit — empty → falls back to unit_ps
     )
 
     private val list = listOf(
-        // ---- Currency
-        Meta("usd", "currency", "دالر", AFN),
-        Meta("eur", "currency", "یورو", AFN),
-        Meta("pkr", "currency", "کلدار", AFN),
+        // ── Currency ──────────────────────────────────────────────────────────
+        Meta("usd",  "currency", "دالر",  AFN, name_fa = "دلار"),
+        Meta("eur",  "currency", "یورو",  AFN, name_fa = "یورو"),
+        Meta("pkr",  "currency", "کلدار", AFN, name_fa = "کلدار"),
 
-        // ---- Gold
-        Meta("gold_18k", "gold", "سره زر ۱۸ عیار", AFN),
-        Meta("gold_21k", "gold", "سره زر ۲۱ عیار", AFN),
-        Meta("gold_24k", "gold", "سره زر ۲۴ عیار", AFN),
-        Meta("gold_per_gram", "gold", "سره زر فی ګرام", "ګرام"),
-        Meta("gold_per_tola", "gold", "سره زر فی توله", "توله"),
+        // ── Gold ──────────────────────────────────────────────────────────────
+        Meta("gold_18k",      "gold", "سره زر ۱۸ عیار",  AFN,     name_fa = "طلای ۱۸ عیار"),
+        Meta("gold_21k",      "gold", "سره زر ۲۱ عیار",  AFN,     name_fa = "طلای ۲۱ عیار"),
+        Meta("gold_24k",      "gold", "سره زر ۲۴ عیار",  AFN,     name_fa = "طلای ۲۴ عیار"),
+        Meta("gold_per_gram", "gold", "سره زر فی ګرام",  "ګرام",  name_fa = "طلا فی‌گرام",  unit_fa = "گرام"),
+        Meta("gold_per_tola", "gold", "سره زر فی توله",  "توله",  name_fa = "طلا فی‌تولہ",  unit_fa = "تولہ"),
 
-        // ---- Stones
-        Meta("stone_diamond", "stones", "الماس", AFN),
-        Meta("stone_ruby", "stones", "یاقوت", AFN),
-        Meta("stone_emerald", "stones", "زمرد", AFN),
-        Meta("stone_lapis", "stones", "لاجورد", AFN),
-        Meta("stone_agate", "stones", "عقیق", AFN),
-        Meta("stone_per_carat", "stones", "فی قیراط", "قیراط"),
+        // ── Stones ────────────────────────────────────────────────────────────
+        Meta("stone_diamond",   "stones", "الماس",    AFN,       name_fa = "الماس"),
+        Meta("stone_ruby",      "stones", "یاقوت",    AFN,       name_fa = "یاقوت"),
+        Meta("stone_emerald",   "stones", "زمرد",     AFN,       name_fa = "زمرد"),
+        Meta("stone_lapis",     "stones", "لاجورد",   AFN,       name_fa = "لاجورد"),
+        Meta("stone_agate",     "stones", "عقیق",     AFN,       name_fa = "عقیق"),
+        Meta("stone_per_carat", "stones", "فی قیراط", "قیراط",   name_fa = "فی‌قیراط",       unit_fa = "قیراط"),
 
-        // ---- Food
-        Meta("food_rice", "food", "وریجې", "کیلو ګرام"),
-        Meta("food_flour", "food", "اوړه", "کیلو ګرام"),
-        Meta("food_sugar", "food", "بوره", "کیلو ګرام"),
-        Meta("food_oil", "food", "غوړي", "لیټر"),
-        Meta("food_tea", "food", "چای", "کیلو ګرام"),
-        Meta("food_eggs", "food", "هګۍ", "عدد"),
-        Meta("food_meat", "food", "غوښه", "کیلو ګرام"),
-        Meta("food_veg_fruit", "food", "سبزي/مېوې", "کیلو ګرام"),
+        // ── Food ──────────────────────────────────────────────────────────────
+        Meta("food_rice",      "food", "وریجې",       "کیلو ګرام", name_fa = "برنج",             unit_fa = "کیلوگرام"),
+        Meta("food_flour",     "food", "اوړه",        "کیلو ګرام", name_fa = "آرد",              unit_fa = "کیلوگرام"),
+        Meta("food_sugar",     "food", "بوره",        "کیلو ګرام", name_fa = "شکر",              unit_fa = "کیلوگرام"),
+        Meta("food_oil",       "food", "غوړي",        "لیټر",      name_fa = "روغن",             unit_fa = "لیتر"),
+        Meta("food_tea",       "food", "چای",         "کیلو ګرام", name_fa = "چای",              unit_fa = "کیلوگرام"),
+        Meta("food_eggs",      "food", "هګۍ",         "عدد",       name_fa = "تخم‌مرغ",          unit_fa = "عدد"),
+        Meta("food_meat",      "food", "غوښه",        "کیلو ګرام", name_fa = "گوشت",             unit_fa = "کیلوگرام"),
+        Meta("food_veg_fruit", "food", "سبزي/مېوې",  "کیلو ګرام", name_fa = "سبزیجات/میوه",    unit_fa = "کیلوگرام"),
 
-        // ---- Fuel
-        Meta("fuel_petrol", "fuel", "پټرول", "لیټر"),
-        Meta("fuel_diesel", "fuel", "ډیزل", "لیټر"),
-        Meta("fuel_lpg", "fuel", "ګاز (LPG)", "کیلو ګرام")
+        // ── Fuel ──────────────────────────────────────────────────────────────
+        Meta("fuel_petrol", "fuel", "پټرول",    "لیټر",      name_fa = "بنزین",     unit_fa = "لیتر"),
+        Meta("fuel_diesel", "fuel", "ډیزل",     "لیټر",      name_fa = "دیزل",      unit_fa = "لیتر"),
+        Meta("fuel_lpg",    "fuel", "ګاز (LPG)","کیلو ګرام", name_fa = "گاز (LPG)", unit_fa = "کیلوگرام")
     )
 
     private val metaNew: Map<String, Meta> =
@@ -73,33 +63,33 @@ object MarketCatalog {
         "gold_18g_gram" to "gold_18k",
         "gold_18g_tola" to "gold_18k",
 
-        "emerald_ct" to "stone_emerald",
-        "lapis_ct" to "stone_lapis",
-        "ruby_ct" to "stone_ruby",
-        "agate_ct" to "stone_agate",
-        "cut_stone_ct" to "stone_per_carat",
-        "raw_stone_g" to "stone_per_carat",
+        "emerald_ct"    to "stone_emerald",
+        "lapis_ct"      to "stone_lapis",
+        "ruby_ct"       to "stone_ruby",
+        "agate_ct"      to "stone_agate",
+        "cut_stone_ct"  to "stone_per_carat",
+        "raw_stone_g"   to "stone_per_carat",
 
-        "flour_kg" to "food_flour",
-        "flour_bag" to "food_flour",
-        "rice_kg" to "food_rice",
-        "rice_bag" to "food_rice",
-        "oil_l" to "food_oil",
-        "oil_kg" to "food_oil",
-        "sugar_kg" to "food_sugar",
-        "tea_kg" to "food_tea",
-        "eggs_piece" to "food_eggs",
-        "eggs_carton" to "food_eggs",
-        "meat_kg" to "food_meat",
-        "veg_kg" to "food_veg_fruit",
-        "fruit_kg" to "food_veg_fruit",
+        "flour_kg"      to "food_flour",
+        "flour_bag"     to "food_flour",
+        "rice_kg"       to "food_rice",
+        "rice_bag"      to "food_rice",
+        "oil_l"         to "food_oil",
+        "oil_kg"        to "food_oil",
+        "sugar_kg"      to "food_sugar",
+        "tea_kg"        to "food_tea",
+        "eggs_piece"    to "food_eggs",
+        "eggs_carton"   to "food_eggs",
+        "meat_kg"       to "food_meat",
+        "veg_kg"        to "food_veg_fruit",
+        "fruit_kg"      to "food_veg_fruit",
 
-        "petrol_l" to "fuel_petrol",
-        "diesel_l" to "fuel_diesel",
-        "lpg_kg" to "fuel_lpg",
-        "kerosene_l" to "fuel_diesel"
+        "petrol_l"      to "fuel_petrol",
+        "diesel_l"      to "fuel_diesel",
+        "lpg_kg"        to "fuel_lpg",
+        "kerosene_l"    to "fuel_diesel"
     )
-        .mapKeys { it.key.lowercase() }
+        .mapKeys  { it.key.lowercase() }
         .mapValues { it.value.lowercase() }
 
     val metaByKey: Map<String, Meta> by lazy {
