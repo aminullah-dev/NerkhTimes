@@ -28,6 +28,7 @@ fun RootApp(vm: MarketViewModel) {
     val scope = rememberCoroutineScope()
     val ctx = LocalContext.current
     val activity = ctx as? Activity
+    val shareText = stringResource(R.string.share_text)
 
     val backStackEntry by nav.currentBackStackEntryAsState()
     val route = backStackEntry?.destination?.route ?: NavRoutes.HOME
@@ -46,15 +47,11 @@ fun RootApp(vm: MarketViewModel) {
     }
 
     fun shareApp() {
-        val shareText =
-            "NerkhTimes — د افغانستان د بازار نرخونه\n\n" +
-                    "Download: https://play.google.com/store/apps/details?id=af.market.nerkhtimes"
-
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, shareText)
         }
-        ctx.startActivity(Intent.createChooser(intent, stringResource(R.string.menu_share)))
+        ctx.startActivity(Intent.createChooser(intent, null))
     }
 
     fun exitApp() {

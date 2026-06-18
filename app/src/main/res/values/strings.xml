@@ -3,7 +3,6 @@
 
     <string name="app_subtitle">د بازار تازه نرخونه</string>
 
-    <string name="home_title">نن بازار داسې دی</string>
     <string name="last_update">وروستی اپډېټ:</string>
     <string name="refresh">تازه کول</string>
 
@@ -32,9 +31,7 @@
     <string name="contact_title">اړیکه</string>
     <string name="contact_email_label">بریښنالیک</string>
     <string name="contact_email">aminhashemi979@gmail.com</string>
-    <string name="contact_text">د اړیکې لپاره: aminhashemi979@gmail.com</string>
 
-    <string name="currency_screen_title">د اسعارو نرخ</string>
     <string name="section_live_rates">ژوندۍ نرخونه</string>
     <string name="section_markets">د بازار کټګورۍ</string>
 
@@ -47,11 +44,12 @@
     <string name="chart_loading">ډاټا رااخلو…</string>
     <string name="chart_empty">History کې ډاټا نشته</string>
     <string name="chart_empty_hint">تلګرام/شیت ته څو ځل نرخ واستوئ، بیا دلته Candle جوړېږي.</string>
-    <string name="chart_data_low">ډاټا کمه ده</string>
     <string name="label_asset">توکی</string>
     <string name="label_tf">وخت</string>
     <string name="retry">بیا هڅه</string>
     <string name="error_prefix">خطا:</string>
+
+    <string name="share_text">NerkhTimes — د افغانستان د بازار نرخونه\n\nDownload: https://play.google.com/store/apps/details?id=af.market.nerkhtimes</string>
 
     <string name="city_picker_label">د ښارونو لېست</string>
 

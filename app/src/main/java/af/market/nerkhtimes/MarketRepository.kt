@@ -4,6 +4,7 @@ import af.market.nerkhtimes.data.model.CandleResponse
 import af.market.nerkhtimes.data.model.MarketsResponse
 import retrofit2.HttpException
 import java.io.IOException
+import java.util.Locale
 
 class MarketRepository {
 
@@ -42,8 +43,9 @@ class MarketRepository {
     }
 
     private fun humanError(e: Exception, fallback: String): String {
-        if (e is IOException) return "انټرنېټ ستونزه"
-        if (e is HttpException) return "Server error (${e.code()})"
+        val farsi = Locale.getDefault().language == "fa"
+        if (e is IOException) return if (farsi) "خطای اتصال به اینترنت" else "انټرنېټ ستونزه"
+        if (e is HttpException) return if (farsi) "خطای سرور (${e.code()})" else "Server error (${e.code()})"
 
         val msg = (e.message ?: fallback).trim()
 
@@ -51,12 +53,12 @@ class MarketRepository {
             msg.contains("malformed", ignoreCase = true) ||
             msg.contains("Expected BEGIN_OBJECT", ignoreCase = true) ||
             msg.contains("Expected BEGIN_ARRAY", ignoreCase = true)
-        ) return "Server JSON problem"
+        ) return if (farsi) "مشکل در پاسخ سرور" else "Server JSON problem"
 
         if (msg.contains("non-json", ignoreCase = true) ||
             msg.contains("text/html", ignoreCase = true) ||
             msg.contains("html", ignoreCase = true)
-        ) return "Server returned HTML (check WebApp access)"
+        ) return if (farsi) "سرور پاسخ نامعتبر داد" else "Server returned HTML (check WebApp access)"
 
         return msg.ifBlank { fallback }
     }

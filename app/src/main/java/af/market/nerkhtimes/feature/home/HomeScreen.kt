@@ -231,7 +231,7 @@ private fun RateChip(item: MarketItem, nf: NumberFormat) {
                 text       = nf.format(item.price),
                 style      = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color      = CurrencyTeal
+                color      = MaterialTheme.colorScheme.primary
             )
             Text(
                 text  = item.name_ps.ifBlank { item.key.uppercase() },

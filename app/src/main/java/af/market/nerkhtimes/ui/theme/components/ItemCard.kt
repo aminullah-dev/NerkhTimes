@@ -2,7 +2,6 @@ package af.market.nerkhtimes.ui.theme.components
 
 import af.market.nerkhtimes.data.model.MarketItem
 import af.market.nerkhtimes.ui.theme.categoryAccentColor
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
