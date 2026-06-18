@@ -1,63 +1,63 @@
 <resources>
     <string name="app_name">NerkhTimes</string>
 
-    <string name="app_subtitle">د بازار تازه نرخونه</string>
+    <string name="app_subtitle">Latest market rates</string>
 
-    <string name="last_update">وروستی اپډېټ:</string>
-    <string name="refresh">تازه کول</string>
+    <string name="last_update">Last update:</string>
+    <string name="refresh">Refresh</string>
 
-    <string name="btn_currency">د اسعارو نرخ</string>
-    <string name="btn_metals">قیمتي زر</string>
-    <string name="btn_gems">قیمتي ډبرې</string>
-    <string name="btn_food">خوراکي توکې</string>
-    <string name="btn_son">د سون توکي</string>
-    <string name="btn_chart">چارت</string>
+    <string name="btn_currency">Currency Rates</string>
+    <string name="btn_metals">Gold &amp; Metals</string>
+    <string name="btn_gems">Precious Stones</string>
+    <string name="btn_food">Food Prices</string>
+    <string name="btn_son">Fuel Prices</string>
+    <string name="btn_chart">Chart</string>
 
-    <string name="menu_home">کور</string>
-    <string name="menu_currency">اسعار</string>
-    <string name="menu_about">کاریال په اړه</string>
-    <string name="menu_contact">اړیکه</string>
-    <string name="menu_share">کاریال استول</string>
-    <string name="menu_exit">وتل</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_currency">Currency</string>
+    <string name="menu_about">About</string>
+    <string name="menu_contact">Contact</string>
+    <string name="menu_share">Share App</string>
+    <string name="menu_exit">Exit</string>
 
-    <string name="about_title">زموږ په اړه</string>
-    <string name="about_text">نرخ ټایمز یو اپ دی چې د افغانستان د ښارونو ورځني نرخونه ښيي.</string>
-    <string name="about_version">نسخه</string>
-    <string name="about_category_title">کټګورۍ</string>
-    <string name="about_categories">اسعار، سره زر، قیمتي ډبرې، خوراکي توکې، د سون توکي</string>
-    <string name="about_cities_title">ښارونه</string>
-    <string name="about_cities">کابل، کندهار، مزار شریف، هرات، جلال اباد، پېښور</string>
+    <string name="about_title">About</string>
+    <string name="about_text">NerkhTimes shows daily market rates for cities across Afghanistan.</string>
+    <string name="about_version">Version</string>
+    <string name="about_category_title">Categories</string>
+    <string name="about_categories">Currency, Gold, Precious Stones, Food, Fuel</string>
+    <string name="about_cities_title">Cities</string>
+    <string name="about_cities">Kabul, Kandahar, Mazar Sharif, Herat, Jalalabad, Peshawar</string>
 
-    <string name="contact_title">اړیکه</string>
-    <string name="contact_email_label">بریښنالیک</string>
+    <string name="contact_title">Contact</string>
+    <string name="contact_email_label">Email</string>
     <string name="contact_email">aminhashemi979@gmail.com</string>
 
-    <string name="section_live_rates">ژوندۍ نرخونه</string>
-    <string name="section_markets">د بازار کټګورۍ</string>
+    <string name="section_live_rates">Live Rates</string>
+    <string name="section_markets">Market Categories</string>
 
-    <string name="no_data">معلومات نشته</string>
-    <string name="error_retry">بیا هڅه وکړئ</string>
+    <string name="no_data">No data available</string>
+    <string name="error_retry">Try Again</string>
 
-    <string name="chart_header_title">چارت</string>
-    <string name="chart_header_sub">د ښار او توکي انتخاب وکړئ، بیا چارت وګورئ.</string>
-    <string name="chart_last">وروستی:</string>
-    <string name="chart_loading">ډاټا رااخلو…</string>
-    <string name="chart_empty">History کې ډاټا نشته</string>
-    <string name="chart_empty_hint">تلګرام/شیت ته څو ځل نرخ واستوئ، بیا دلته Candle جوړېږي.</string>
-    <string name="label_asset">توکی</string>
-    <string name="label_tf">وخت</string>
-    <string name="retry">بیا هڅه</string>
-    <string name="error_prefix">خطا:</string>
+    <string name="chart_header_title">Chart</string>
+    <string name="chart_header_sub">Select a city and commodity to view the chart.</string>
+    <string name="chart_last">Last:</string>
+    <string name="chart_loading">Loading data…</string>
+    <string name="chart_empty">No history data available</string>
+    <string name="chart_empty_hint">Submit a few prices via Telegram/Sheet and the chart will appear here.</string>
+    <string name="label_asset">Commodity</string>
+    <string name="label_tf">Timeframe</string>
+    <string name="retry">Retry</string>
+    <string name="error_prefix">Error:</string>
 
-    <string name="share_text">NerkhTimes — د افغانستان د بازار نرخونه\n\nDownload: https://play.google.com/store/apps/details?id=af.market.nerkhtimes</string>
+    <string name="share_text">NerkhTimes — Afghanistan market rates\n\nDownload: https://play.google.com/store/apps/details?id=af.market.nerkhtimes</string>
 
-    <string name="city_picker_label">د ښارونو لېست</string>
+    <string name="city_picker_label">Select city</string>
 
-    <!-- City names (Pashto) -->
-    <string name="city_kabul">کابل</string>
-    <string name="city_kandahar">کندهار</string>
-    <string name="city_mazar">مزار شریف</string>
-    <string name="city_herat">هرات</string>
-    <string name="city_jalalabad">جلال اباد</string>
-    <string name="city_peshawar">پېښور</string>
+    <!-- City names (English) -->
+    <string name="city_kabul">Kabul</string>
+    <string name="city_kandahar">Kandahar</string>
+    <string name="city_mazar">Mazar Sharif</string>
+    <string name="city_herat">Herat</string>
+    <string name="city_jalalabad">Jalalabad</string>
+    <string name="city_peshawar">Peshawar</string>
 </resources>
