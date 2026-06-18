@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">نرخ تایمز</string>
+
+    <string name="app_subtitle">آخرین نرخ‌های بازار</string>
+
+    <string name="home_title">بازار امروز</string>
+    <string name="last_update">آخرین بروزرسانی:</string>
+    <string name="refresh">بروزرسانی</string>
+
+    <string name="btn_currency">نرخ ارز</string>
+    <string name="btn_metals">طلا و فلزات</string>
+    <string name="btn_gems">سنگ‌های قیمتی</string>
+    <string name="btn_food">مواد غذایی</string>
+    <string name="btn_son">سوخت</string>
+    <string name="btn_chart">نمودار</string>
+
+    <string name="menu_home">خانه</string>
+    <string name="menu_currency">ارز</string>
+    <string name="menu_about">درباره برنامه</string>
+    <string name="menu_contact">تماس</string>
+    <string name="menu_share">اشتراک‌گذاری</string>
+    <string name="menu_exit">خروج</string>
+
+    <string name="about_title">درباره ما</string>
+    <string name="about_text">نرخ تایمز یک برنامه است که نرخ‌های روزانه بازار شهرهای افغانستان را نشان می‌دهد.</string>
+    <string name="about_version">نسخه</string>
+    <string name="about_category_title">دسته‌بندی‌ها</string>
+    <string name="about_categories">ارز، طلا، سنگ‌های قیمتی، مواد غذایی، سوخت</string>
+    <string name="about_cities_title">شهرها</string>
+    <string name="about_cities">کابل، قندهار، مزار شریف، هرات، جلال‌آباد، پشاور</string>
+
+    <string name="contact_title">تماس با ما</string>
+    <string name="contact_email_label">ایمیل</string>
+    <string name="contact_email">aminhashemi979@gmail.com</string>
+    <string name="contact_text">برای تماس: aminhashemi979@gmail.com</string>
+
+    <string name="currency_screen_title">نرخ ارز</string>
+    <string name="section_live_rates">نرخ‌های زنده</string>
+    <string name="section_markets">دسته‌بندی‌های بازار</string>
+
+    <string name="no_data">اطلاعاتی موجود نیست</string>
+    <string name="error_retry">تلاش دوباره</string>
+
+    <string name="chart_header_title">نمودار</string>
+    <string name="chart_header_sub">شهر و کالا را انتخاب کنید، سپس نمودار را مشاهده کنید.</string>
+    <string name="chart_last">آخرین:</string>
+    <string name="chart_loading">در حال دریافت داده…</string>
+    <string name="chart_empty">داده‌ای در تاریخچه موجود نیست</string>
+    <string name="chart_empty_hint">چند بار قیمت را ارسال کنید، سپس نمودار اینجا ایجاد می‌شود.</string>
+    <string name="chart_data_low">داده کم است</string>
+    <string name="label_asset">کالا</string>
+    <string name="label_tf">بازه زمانی</string>
+    <string name="retry">تلاش دوباره</string>
+    <string name="error_prefix">خطا:</string>
+
+    <string name="city_picker_label">لیست شهرها</string>
+
+    <!-- City names (Dari/Farsi) -->
+    <string name="city_kabul">کابل</string>
+    <string name="city_kandahar">قندهار</string>
+    <string name="city_mazar">مزار شریف</string>
+    <string name="city_herat">هرات</string>
+    <string name="city_jalalabad">جلال‌آباد</string>
+    <string name="city_peshawar">پشاور</string>
+</resources>

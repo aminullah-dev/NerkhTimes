@@ -20,16 +20,16 @@ fun CityPicker(
     onSelect: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val cities = remember {
-        listOf(
-            CityOption("kabul", "کابل"),
-            CityOption("kandahar", "کندهار"),
-            CityOption("mazar", "مزار شریف"),
-            CityOption("herat", "هرات"),
-            CityOption("jalalabad", "جلال اباد"),
-            CityOption("peshawar", "پېښور")
-        )
-    }
+    // City names come from string resources so they switch automatically
+    // when the device locale changes (Pashto ↔ Dari/Farsi).
+    val cities = listOf(
+        CityOption("kabul",     stringResource(R.string.city_kabul)),
+        CityOption("kandahar",  stringResource(R.string.city_kandahar)),
+        CityOption("mazar",     stringResource(R.string.city_mazar)),
+        CityOption("herat",     stringResource(R.string.city_herat)),
+        CityOption("jalalabad", stringResource(R.string.city_jalalabad)),
+        CityOption("peshawar",  stringResource(R.string.city_peshawar))
+    )
 
     var expanded by remember { mutableStateOf(false) }
 

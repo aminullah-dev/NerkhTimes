@@ -12,6 +12,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 data class MarketUiState(
     val loading: Boolean = false,
@@ -62,9 +63,12 @@ class MarketViewModel : ViewModel() {
                 return@launch
             }
 
+            // Detect device locale so Farsi/Dari users see localized item names
+            val useFarsi = Locale.getDefault().language == "fa"
+
             val fixed = res.data.map { city ->
                 val itemsFixed = city.items
-                    .map { it.mergeCatalog() }
+                    .map { it.mergeCatalog(useFarsi) }
                     .filter { it.price > 0.0 }
                 city.copy(items = itemsFixed)
             }
@@ -132,12 +136,31 @@ class MarketViewModel : ViewModel() {
     }
 }
 
-private fun MarketItem.mergeCatalog(): MarketItem {
-    val meta = MarketCatalog.metaByKey[key.lowercase()]
-    return if (meta == null) this
-    else this.copy(
-        name_ps = if (name_ps.isBlank()) meta.name_ps else name_ps,
-        unit_ps = if (unit_ps.isBlank()) meta.unit_ps else unit_ps,
-        group = meta.group
+/**
+ * Merges catalog metadata into a [MarketItem].
+ * For Farsi locale the catalog's Dari name always wins (the API only returns Pashto).
+ * For Pashto locale the API-provided name is preferred; catalog is the fallback.
+ */
+private fun MarketItem.mergeCatalog(useFarsi: Boolean = false): MarketItem {
+    val meta = MarketCatalog.metaByKey[key.lowercase()] ?: return this
+
+    val catalogName = if (useFarsi && meta.name_fa.isNotBlank()) meta.name_fa else meta.name_ps
+    val catalogUnit = if (useFarsi && meta.unit_fa.isNotBlank()) meta.unit_fa else meta.unit_ps
+
+    val resolvedName = when {
+        useFarsi              -> catalogName          // always use Dari catalog name
+        name_ps.isBlank()     -> catalogName          // API didn't provide a name
+        else                  -> name_ps              // keep API-provided Pashto name
+    }
+    val resolvedUnit = when {
+        useFarsi              -> catalogUnit
+        unit_ps.isBlank()     -> catalogUnit
+        else                  -> unit_ps
+    }
+
+    return this.copy(
+        name_ps = resolvedName,
+        unit_ps = resolvedUnit,
+        group   = meta.group
     )
 }
