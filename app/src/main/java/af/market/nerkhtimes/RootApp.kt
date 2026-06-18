@@ -153,13 +153,24 @@ fun RootApp(vm: MarketViewModel) {
     ) {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text(topTitle, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = topTitle,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    },
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
                             Icon(Icons.Default.Menu, contentDescription = "Menu")
                         }
-                    }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        titleContentColor = MaterialTheme.colorScheme.onSurface
+                    )
                 )
             }
         ) { padding ->

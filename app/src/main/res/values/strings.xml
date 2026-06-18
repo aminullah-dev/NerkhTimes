@@ -35,6 +35,8 @@
     <string name="contact_text">د اړیکې لپاره: aminhashemi979@gmail.com</string>
 
     <string name="currency_screen_title">د اسعارو نرخ</string>
+    <string name="section_live_rates">ژوندۍ نرخونه</string>
+    <string name="section_markets">د بازار کټګورۍ</string>
 
     <string name="no_data">معلومات نشته</string>
     <string name="error_retry">بیا هڅه وکړئ</string>
