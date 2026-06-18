@@ -6,7 +6,7 @@ import af.market.nerkhtimes.data.model.MarketsResponse
 import retrofit2.HttpException
 import java.io.IOException
 
-class MarketRepository(ctx: Context) {
+class MarketRepository(private val ctx: Context) {
 
     private val api   = ApiClient.api
     private val cache = CacheManager(ctx)

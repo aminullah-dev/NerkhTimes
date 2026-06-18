@@ -1,0 +1,20 @@
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Android Studio / IntelliJ IDEA
+*.iml
+.idea/
+local.properties
+
+# App signing
+*.jks
+*.keystore
+
+# Generated
+app/src/main/assets/
+
+# OS
+.DS_Store
+Thumbs.db
