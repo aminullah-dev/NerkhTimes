@@ -13,7 +13,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 data class MarketUiState(
     val loading: Boolean = false,
@@ -43,6 +42,12 @@ class MarketViewModel(app: Application) : AndroidViewModel(app) {
     private val _candleState = MutableStateFlow(CandleUiState())
     val candleState: StateFlow<CandleUiState> = _candleState
 
+    /** Raw (unprocessed) data kept so refreshLocale() can re-apply names without a network call. */
+    private var rawData: List<CityMarket> = emptyList()
+
+    /** Set to true before recreate(); cleared in MainActivity after refreshLocale() is called. */
+    var pendingLocaleRefresh: Boolean = false
+
     private var autoJob: Job? = null
     private var marketsJob: Job? = null
     private var candlesJob: Job? = null
@@ -63,24 +68,17 @@ class MarketViewModel(app: Application) : AndroidViewModel(app) {
             val res = repo.fetchMarkets()
 
             if (!res.ok) {
-                _state.value = _state.value.copy(
-                    loading = false,
-                    error = res.error ?: "server_error"
-                )
+                _state.value = _state.value.copy(loading = false, error = res.error ?: "server_error")
                 return@launch
             }
 
-            val useFarsi = Locale.getDefault().language == "fa"
+            rawData = res.data
 
-            val fixed = res.data.map { city ->
-                val itemsFixed = city.items
-                    .map { it.mergeCatalog(useFarsi) }
-                    .filter { it.price > 0.0 }
-                city.copy(items = itemsFixed)
-            }
+            val fixed = processData(rawData)
 
             val cacheError = if (res.error == MarketRepository.CACHE_SENTINEL) {
-                if (useFarsi) "آفلاین — داده‌های قبلی نشان داده می‌شود"
+                val farsi = LanguageManager.getSavedLanguage(getApplication()) == LanguageManager.LANG_FA
+                if (farsi) "آفلاین — داده‌های قبلی نشان داده می‌شود"
                 else "آفلاین — زوړ معلومات ښودل کیږي"
             } else null
 
@@ -93,10 +91,43 @@ class MarketViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    /**
+     * Re-applies the current language setting to already-fetched raw data.
+     * Called after a locale change so item names update without a network round-trip.
+     * Falls back to load() if no raw data is available yet.
+     */
+    fun refreshLocale() {
+        if (rawData.isEmpty()) {
+            // Data not yet fetched; the in-flight load() will use the new locale automatically.
+            return
+        }
+        _state.value = _state.value.copy(data = processData(rawData))
+    }
+
+    /** Signals that a locale change is pending across the upcoming recreate(). */
+    fun markLocaleChangePending() {
+        pendingLocaleRefresh = true
+    }
+
+    /** Returns true and clears the flag if a pending locale change was registered. */
+    fun consumeLocaleChangePending(): Boolean {
+        return pendingLocaleRefresh.also { pendingLocaleRefresh = false }
+    }
+
+    private fun processData(raw: List<CityMarket>): List<CityMarket> {
+        val useFarsi = LanguageManager.getSavedLanguage(getApplication()) == LanguageManager.LANG_FA
+        return raw.map { city ->
+            city.copy(
+                items = city.items
+                    .map { it.mergeCatalog(useFarsi) }
+                    .filter { it.price > 0.0 }
+            )
+        }
+    }
+
     fun startAutoRefresh(seconds: Int = 60) {
         if (autoStarted) return
         autoStarted = true
-
         autoJob?.cancel()
         autoJob = viewModelScope.launch {
             while (isActive) {
@@ -116,25 +147,17 @@ class MarketViewModel(app: Application) : AndroidViewModel(app) {
         limit: Int = 180
     ) {
         val cityId = _state.value.selectedCityId
-
         candlesJob?.cancel()
         candlesJob = viewModelScope.launch {
-            _candleState.value = _candleState.value.copy(
-                loading = true,
-                error = null,
-                key = key,
-                tf = tf
-            )
-
+            _candleState.value = _candleState.value.copy(loading = true, error = null, key = key, tf = tf)
             val res = repo.fetchCandles(cityId = cityId, key = key, tf = tf, limit = limit)
-
             _candleState.value = _candleState.value.copy(
                 loading = false,
                 candles = res.candles,
                 error = when {
-                    !res.ok -> res.error ?: "API error"
+                    !res.ok            -> res.error ?: "API error"
                     res.candles.isEmpty() -> "History کې ډاټا نشته"
-                    else -> null
+                    else               -> null
                 }
             )
         }
@@ -150,10 +173,8 @@ class MarketViewModel(app: Application) : AndroidViewModel(app) {
 
 private fun MarketItem.mergeCatalog(useFarsi: Boolean = false): MarketItem {
     val meta = MarketCatalog.metaByKey[key.lowercase()] ?: return this
-
     val catalogName = if (useFarsi && meta.name_fa.isNotBlank()) meta.name_fa else meta.name_ps
     val catalogUnit = if (useFarsi && meta.unit_fa.isNotBlank()) meta.unit_fa else meta.unit_ps
-
     val resolvedName = when {
         useFarsi          -> catalogName
         name_ps.isBlank() -> catalogName
@@ -164,10 +185,5 @@ private fun MarketItem.mergeCatalog(useFarsi: Boolean = false): MarketItem {
         unit_ps.isBlank() -> catalogUnit
         else              -> unit_ps
     }
-
-    return this.copy(
-        name_ps = resolvedName,
-        unit_ps = resolvedUnit,
-        group   = meta.group
-    )
+    return this.copy(name_ps = resolvedName, unit_ps = resolvedUnit, group = meta.group)
 }

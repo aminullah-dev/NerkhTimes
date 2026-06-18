@@ -5,7 +5,6 @@ import af.market.nerkhtimes.data.model.CandleResponse
 import af.market.nerkhtimes.data.model.MarketsResponse
 import retrofit2.HttpException
 import java.io.IOException
-import java.util.Locale
 
 class MarketRepository(ctx: Context) {
 
@@ -48,7 +47,7 @@ class MarketRepository(ctx: Context) {
     }
 
     private fun humanError(e: Exception, fallback: String): String {
-        val farsi = Locale.getDefault().language == "fa"
+        val farsi = LanguageManager.getSavedLanguage(ctx) == LanguageManager.LANG_FA
         if (e is IOException) return if (farsi) "خطای اتصال به اینترنت" else "انټرنېټ ستونزه"
         if (e is HttpException) return if (farsi) "خطای سرور (${e.code()})" else "Server error (${e.code()})"
 
