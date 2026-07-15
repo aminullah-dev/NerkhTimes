@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -18,6 +19,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import af.market.nerkhtimes.navigation.NavRoutes
 import kotlinx.coroutines.launch
+
+private data class BottomTab(val route: String, val icon: ImageVector, val labelRes: Int)
+
+private val BOTTOM_TABS = listOf(
+    BottomTab(NavRoutes.HOME,     Icons.Default.Home,             R.string.menu_home),
+    BottomTab(NavRoutes.CURRENCY, Icons.Default.CurrencyExchange, R.string.menu_currency),
+    BottomTab(NavRoutes.METALS,   Icons.Default.Paid,             R.string.tab_metals),
+    BottomTab(NavRoutes.CHART,    Icons.Default.ShowChart,        R.string.btn_chart)
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -178,6 +188,24 @@ fun RootApp(vm: MarketViewModel) {
                         titleContentColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
+            },
+            bottomBar = {
+                NavigationBar {
+                    BOTTOM_TABS.forEach { tab ->
+                        NavigationBarItem(
+                            selected = route == tab.route,
+                            onClick = { go(tab.route) },
+                            icon = { Icon(tab.icon, contentDescription = null) },
+                            label = {
+                                Text(
+                                    text = stringResource(tab.labelRes),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        )
+                    }
+                }
             }
         ) { padding ->
             AppNav(nav = nav, padding = padding, vm = vm)
