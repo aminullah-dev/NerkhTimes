@@ -96,7 +96,14 @@ fun HomeScreen(
                 SectionLabel(stringResource(R.string.section_live_rates))
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     items(currencyItems, key = { it.key }) { item ->
-                        RateChip(item = item, nf = nf)
+                        RateChip(
+                            item = item,
+                            nf = nf,
+                            onClick = {
+                                vm.setChartAsset(item.key)
+                                nav.navigate(NavRoutes.CHART)
+                            }
+                        )
                     }
                 }
             }
@@ -224,9 +231,11 @@ private fun HeroCard(
 
 // ── Live rate chip ─────────────────────────────────────────────────────────────
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RateChip(item: MarketItem, nf: NumberFormat) {
+private fun RateChip(item: MarketItem, nf: NumberFormat, onClick: () -> Unit) {
     Surface(
+        onClick = onClick,
         shape  = MaterialTheme.shapes.medium,
         color  = MaterialTheme.colorScheme.surface,
         shadowElevation = 2.dp,
@@ -250,11 +259,23 @@ private fun RateChip(item: MarketItem, nf: NumberFormat) {
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Text(
-                text  = "؋ AFN",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-            )
+            // Affordance hint: tapping opens this asset's chart
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(3.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ShowChart,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                    modifier = Modifier.size(12.dp)
+                )
+                Text(
+                    text  = "؋ AFN",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                )
+            }
         }
     }
 }

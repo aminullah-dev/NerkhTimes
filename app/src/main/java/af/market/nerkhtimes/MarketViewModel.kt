@@ -159,6 +159,15 @@ class MarketViewModel(app: Application) : AndroidViewModel(app) {
         _state.value = _state.value.copy(selectedCityId = cityId)
     }
 
+    /**
+     * Pre-selects the chart asset without fetching. ChartScreen's entry
+     * LaunchedEffect performs the actual load, so navigating from a rate
+     * chip triggers exactly one request.
+     */
+    fun setChartAsset(key: String) {
+        _candleState.value = _candleState.value.copy(key = key)
+    }
+
     fun loadCandles(
         key: String = _candleState.value.key,
         tf: Int = _candleState.value.tf,
