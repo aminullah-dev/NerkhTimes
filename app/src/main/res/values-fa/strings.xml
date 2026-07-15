@@ -59,6 +59,9 @@
 
     <string name="city_picker_label">لیست شهرها</string>
 
+    <string name="official_rates_title">نرخ رسمی (بین‌بانکی)</string>
+    <string name="official_rates_source">منبع: open.er-api.com — روزانه به‌روز می‌شود. نرخ بازار ممکن است متفاوت باشد.</string>
+
     <!-- City names (Dari/Farsi) -->
     <string name="city_kabul">کابل</string>
     <string name="city_kandahar">قندهار</string>

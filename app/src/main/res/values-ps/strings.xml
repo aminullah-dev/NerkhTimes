@@ -59,6 +59,9 @@
 
     <string name="city_picker_label">د ښارونو لېست</string>
 
+    <string name="official_rates_title">رسمي نرخ (بانکي)</string>
+    <string name="official_rates_source">سرچینه: open.er-api.com — هره ورځ نوې کېږي. د بازار نرخ توپیر لرلی شي.</string>
+
     <!-- City names (Pashto) -->
     <string name="city_kabul">کابل</string>
     <string name="city_kandahar">کندهار</string>

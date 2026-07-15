@@ -58,6 +58,9 @@
 
     <string name="city_picker_label">Select city</string>
 
+    <string name="official_rates_title">Official Rate (Interbank)</string>
+    <string name="official_rates_source">Source: open.er-api.com — updated daily. Bazaar rates may differ.</string>
+
     <!-- City names (English) -->
     <string name="city_kabul">Kabul</string>
     <string name="city_kandahar">Kandahar</string>

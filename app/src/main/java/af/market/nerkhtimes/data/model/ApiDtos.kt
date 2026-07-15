@@ -50,3 +50,21 @@ data class Candle(
     @SerializedName("l") val l: Double = 0.0,
     @SerializedName("c") val c: Double = 0.0
 )
+
+/** Raw response from open.er-api.com/v6/latest/USD (free, no API key). */
+data class OfficialRatesResponse(
+    @SerializedName("result") val result: String = "",
+    @SerializedName("time_last_update_unix") val timeLastUpdateUnix: Long = 0L,
+    @SerializedName("rates") val rates: Map<String, Double> = emptyMap()
+)
+
+/**
+ * Official (interbank) exchange rates in AFN per 1 unit of foreign currency.
+ * Shown next to the bazaar rates for comparison. Also Gson-cached to disk.
+ */
+data class OfficialRates(
+    val usdToAfn: Double = 0.0,
+    val eurToAfn: Double = 0.0,
+    val pkrToAfn: Double = 0.0,
+    val updatedUnix: Long = 0L
+)

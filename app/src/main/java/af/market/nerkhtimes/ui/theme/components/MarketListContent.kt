@@ -2,6 +2,7 @@ package af.market.nerkhtimes.ui.theme.components
 
 import af.market.nerkhtimes.MarketViewModel
 import af.market.nerkhtimes.R
+import af.market.nerkhtimes.data.model.OfficialRates
 import af.market.nerkhtimes.ui.theme.categoryAccentColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -34,6 +35,7 @@ fun MarketListContent(
     icon: ImageVector
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
+    val officialRates by vm.officialRates.collectAsStateWithLifecycle()
     val nf = remember { NumberFormat.getNumberInstance(Locale.US) }
     val accentColor = categoryAccentColor(group)
 
@@ -101,6 +103,15 @@ fun MarketListContent(
 
         item(key = "category_header") {
             CategoryHeader(title = title, icon = icon, accentColor = accentColor)
+        }
+
+        // Official interbank rate — currency screen only, hidden when unavailable
+        if (group == "currency") {
+            officialRates?.let { rates ->
+                item(key = "official_rates") {
+                    OfficialRatesCard(rates = rates)
+                }
+            }
         }
 
         if (items.isEmpty()) {
@@ -176,6 +187,68 @@ private fun InlineErrorBanner(message: String, onRetry: () -> Unit) {
                     style = MaterialTheme.typography.labelMedium
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun OfficialRatesCard(rates: OfficialRates) {
+    // The feed gives fractional values (e.g. 1 PKR = 0.24 AFN), so keep 2 decimals
+    val nf = remember {
+        NumberFormat.getNumberInstance(Locale.US).apply {
+            minimumFractionDigits = 2
+            maximumFractionDigits = 2
+        }
+    }
+    val rows = listOf(
+        "USD" to rates.usdToAfn,
+        "EUR" to rates.eurToAfn,
+        "PKR" to rates.pkrToAfn
+    ).filter { it.second > 0.0 }
+
+    if (rows.isEmpty()) return
+
+    Surface(
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.official_rates_title),
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+
+            rows.forEach { (code, value) ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "1 $code",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                    Text(
+                        text = "${nf.format(value)} ؋",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+            }
+
+            Text(
+                text = stringResource(R.string.official_rates_source),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.65f)
+            )
         }
     }
 }

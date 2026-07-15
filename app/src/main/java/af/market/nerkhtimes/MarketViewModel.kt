@@ -7,6 +7,7 @@ import af.market.nerkhtimes.data.model.Candle
 import af.market.nerkhtimes.data.model.CityMarket
 import af.market.nerkhtimes.data.model.MarketCatalog
 import af.market.nerkhtimes.data.model.MarketItem
+import af.market.nerkhtimes.data.model.OfficialRates
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -34,13 +35,18 @@ data class CandleUiState(
 
 class MarketViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val repo = MarketRepository(app.applicationContext)
+    private val repo         = MarketRepository(app.applicationContext)
+    private val officialRepo = OfficialRatesRepository(app.applicationContext)
 
     private val _state = MutableStateFlow(MarketUiState())
     val state: StateFlow<MarketUiState> = _state
 
     private val _candleState = MutableStateFlow(CandleUiState())
     val candleState: StateFlow<CandleUiState> = _candleState
+
+    /** Official interbank AFN rates; null until fetched (card hidden in UI). */
+    private val _officialRates = MutableStateFlow<OfficialRates?>(null)
+    val officialRates: StateFlow<OfficialRates?> = _officialRates
 
     /** Raw (unprocessed) data kept so refreshLocale() can re-apply names without a network call. */
     private var rawData: List<CityMarket> = emptyList()
@@ -56,6 +62,13 @@ class MarketViewModel(app: Application) : AndroidViewModel(app) {
     init {
         load()
         startAutoRefresh(60)
+        loadOfficialRates()
+    }
+
+    private fun loadOfficialRates() {
+        viewModelScope.launch {
+            _officialRates.value = officialRepo.getRates()
+        }
     }
 
     fun load() = refresh(silent = false)
