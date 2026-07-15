@@ -39,14 +39,10 @@
     <string name="no_data">No data available</string>
     <string name="error_retry">Try Again</string>
 
-    <string name="chart_header_title">Chart</string>
-    <string name="chart_header_sub">Select a city and commodity to view the chart.</string>
-    <string name="chart_last">Last:</string>
     <string name="chart_loading">Loading data…</string>
     <string name="chart_empty">No history data available</string>
     <string name="chart_empty_hint">Submit a few prices via Telegram/Sheet and the chart will appear here.</string>
     <string name="label_asset">Commodity</string>
-    <string name="label_tf">Timeframe</string>
     <string name="retry">Retry</string>
     <string name="error_prefix">Error:</string>
 

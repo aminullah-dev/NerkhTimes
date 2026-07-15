@@ -40,14 +40,10 @@
     <string name="no_data">معلومات نشته</string>
     <string name="error_retry">بیا هڅه وکړئ</string>
 
-    <string name="chart_header_title">چارت</string>
-    <string name="chart_header_sub">د ښار او توکي انتخاب وکړئ، بیا چارت وګورئ.</string>
-    <string name="chart_last">وروستی:</string>
     <string name="chart_loading">ډاټا رااخلو…</string>
     <string name="chart_empty">History کې ډاټا نشته</string>
     <string name="chart_empty_hint">تلګرام/شیت ته څو ځل نرخ واستوئ، بیا دلته Candle جوړېږي.</string>
     <string name="label_asset">توکی</string>
-    <string name="label_tf">وخت</string>
     <string name="retry">بیا هڅه</string>
     <string name="error_prefix">خطا:</string>
 

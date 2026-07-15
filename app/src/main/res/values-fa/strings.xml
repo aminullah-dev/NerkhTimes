@@ -40,14 +40,10 @@
     <string name="no_data">اطلاعاتی موجود نیست</string>
     <string name="error_retry">تلاش دوباره</string>
 
-    <string name="chart_header_title">نمودار</string>
-    <string name="chart_header_sub">شهر و کالا را انتخاب کنید، سپس نمودار را مشاهده کنید.</string>
-    <string name="chart_last">آخرین:</string>
     <string name="chart_loading">در حال دریافت داده…</string>
     <string name="chart_empty">داده‌ای در تاریخچه موجود نیست</string>
     <string name="chart_empty_hint">چند بار قیمت را ارسال کنید، سپس نمودار اینجا ایجاد می‌شود.</string>
     <string name="label_asset">کالا</string>
-    <string name="label_tf">بازه زمانی</string>
     <string name="retry">تلاش دوباره</string>
     <string name="error_prefix">خطا:</string>
 
