@@ -426,7 +426,7 @@ private fun CandleChartView(
                         this.lineColor = lineColor
                         lineWidth = 1f
                         enableDashedLine(12f, 8f, 0f)
-                        textColor = lineColor
+                        this.textColor = lineColor
                         textSize = 10f
                         labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
                     }
