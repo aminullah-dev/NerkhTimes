@@ -31,7 +31,10 @@ data class MarketItem(
 
     @SerializedName("price") val price: Double = 0.0,
 
-    val group: String = "other"
+    val group: String = "other",
+
+    /** Last distinct price before the current one (0.0 = unknown). Set locally, not from API. */
+    val prev_price: Double = 0.0
 )
 
 data class CandleResponse(

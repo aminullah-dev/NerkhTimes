@@ -11,6 +11,9 @@ class MarketRepository(private val ctx: Context) {
     private val api   = ApiClient.api
     private val cache = CacheManager(ctx)
 
+    /** Previous distinct price per "cityId|itemKey" — for ▲/▼ change indicators. */
+    fun previousPrices(): Map<String, Double> = cache.loadPrevPrices()
+
     suspend fun fetchMarkets(): MarketsResponse {
         return try {
             val res = api.getMarkets()

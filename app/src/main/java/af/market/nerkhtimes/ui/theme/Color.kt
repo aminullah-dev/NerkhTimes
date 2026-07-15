@@ -22,6 +22,10 @@ val DarkOutline        = Color(0xFF2D3142)
 val DarkTealContainer  = Color(0xFF00695C)  // teal-700
 val OnDarkTealContainer= Color(0xFFE0F2F1)
 
+// ── Market direction colours (TradingView convention, same in both themes) ────
+val BullGreen          = Color(0xFF26A69A)
+val BearRed            = Color(0xFFEF5350)
+
 // ── Category accent colours ───────────────────────────────────────────────────
 val GoldAmber          = Color(0xFFFB8C00)  // orange-600  → gold / metals
 val StonePurple        = Color(0xFF7B1FA2)  // purple-800  → gems / stones

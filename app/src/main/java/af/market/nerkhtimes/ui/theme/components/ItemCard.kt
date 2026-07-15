@@ -1,6 +1,8 @@
 package af.market.nerkhtimes.ui.theme.components
 
 import af.market.nerkhtimes.data.model.MarketItem
+import af.market.nerkhtimes.ui.theme.BearRed
+import af.market.nerkhtimes.ui.theme.BullGreen
 import af.market.nerkhtimes.ui.theme.categoryAccentColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,6 +17,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import java.text.NumberFormat
 import java.util.Locale
+
+/**
+ * "▲ +0.8%" / "▼ -1.2%" market-direction label, tinted bull-green / bear-red.
+ * Renders nothing until a distinct previous price is known.
+ */
+@Composable
+fun PriceChangeLabel(price: Double, prevPrice: Double) {
+    if (prevPrice <= 0.0 || prevPrice == price) return
+    val up  = price >= prevPrice
+    val pct = (price - prevPrice) / prevPrice * 100
+    Text(
+        text = (if (up) "▲ " else "▼ ") + String.format(Locale.US, "%+.1f%%", pct),
+        style = MaterialTheme.typography.labelSmall,
+        fontWeight = FontWeight.SemiBold,
+        color = if (up) BullGreen else BearRed,
+        maxLines = 1
+    )
+}
 
 @Composable
 fun ItemCard(
@@ -66,6 +86,7 @@ fun ItemCard(
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                    PriceChangeLabel(price = item.price, prevPrice = item.prev_price)
                 }
 
                 // Name + unit — end side (visually left in RTL)

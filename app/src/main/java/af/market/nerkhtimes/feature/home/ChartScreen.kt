@@ -24,6 +24,8 @@ import af.market.nerkhtimes.MarketViewModel
 import af.market.nerkhtimes.R
 import af.market.nerkhtimes.data.model.Candle
 import af.market.nerkhtimes.data.model.MarketCatalog
+import af.market.nerkhtimes.ui.theme.BearRed
+import af.market.nerkhtimes.ui.theme.BullGreen
 import af.market.nerkhtimes.ui.theme.components.CityPicker
 import com.github.mikephil.charting.charts.CandleStickChart
 import com.github.mikephil.charting.components.LimitLine
@@ -39,10 +41,6 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
-// Industry-standard candle colours (TradingView convention) — same in both themes
-private val BullGreen = Color(0xFF26A69A)
-private val BearRed   = Color(0xFFEF5350)
 
 private val TF_OPTIONS = listOf(5, 15, 30, 60, 240)
 

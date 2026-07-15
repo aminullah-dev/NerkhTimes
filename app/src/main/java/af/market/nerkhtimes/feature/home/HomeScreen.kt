@@ -6,6 +6,7 @@ import af.market.nerkhtimes.data.model.MarketItem
 import af.market.nerkhtimes.navigation.NavRoutes
 import af.market.nerkhtimes.ui.theme.*
 import af.market.nerkhtimes.ui.theme.components.CityPicker
+import af.market.nerkhtimes.ui.theme.components.PriceChangeLabel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -16,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +39,7 @@ private data class CategoryItem(
     val accentColor: Color
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     padding: PaddingValues,
@@ -63,10 +66,16 @@ fun HomeScreen(
         CategoryItem(stringResource(R.string.btn_chart),     Icons.Default.ShowChart,        NavRoutes.CHART,    ChartBlue)
     )
 
-    Column(
+    PullToRefreshBox(
+        isRefreshing = state.loading,
+        onRefresh = { vm.refresh(silent = false) },
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
+    ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(scroll)
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -117,6 +126,7 @@ fun HomeScreen(
         }
 
         Spacer(Modifier.height(8.dp))
+    }
     }
 }
 
@@ -234,6 +244,7 @@ private fun RateChip(item: MarketItem, nf: NumberFormat) {
                 fontWeight = FontWeight.Bold,
                 color      = MaterialTheme.colorScheme.primary
             )
+            PriceChangeLabel(price = item.price, prevPrice = item.prev_price)
             Text(
                 text  = item.name_ps.ifBlank { item.key.uppercase() },
                 style = MaterialTheme.typography.labelSmall,

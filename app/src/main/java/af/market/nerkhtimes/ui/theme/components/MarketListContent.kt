@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -26,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import java.text.NumberFormat
 import java.util.Locale
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MarketListContent(
     padding: PaddingValues,
@@ -69,10 +71,15 @@ fun MarketListContent(
         return
     }
 
-    LazyColumn(
+    PullToRefreshBox(
+        isRefreshing = state.loading,
+        onRefresh = { vm.refresh(silent = false) },
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding),
+            .padding(padding)
+    ) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -127,6 +134,7 @@ fun MarketListContent(
                 ItemCard(item = item, nf = nf)
             }
         }
+    }
     }
 }
 

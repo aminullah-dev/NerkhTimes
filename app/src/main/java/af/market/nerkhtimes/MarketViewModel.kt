@@ -129,10 +129,15 @@ class MarketViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun processData(raw: List<CityMarket>): List<CityMarket> {
         val useFarsi = LanguageManager.getSavedLanguage(getApplication()) == LanguageManager.LANG_FA
+        val prevPrices = repo.previousPrices()
         return raw.map { city ->
             city.copy(
                 items = city.items
-                    .map { it.mergeCatalog(useFarsi) }
+                    .map { item ->
+                        item.mergeCatalog(useFarsi).copy(
+                            prev_price = prevPrices[CacheManager.priceKey(city.city_id, item.key)] ?: 0.0
+                        )
+                    }
                     .filter { it.price > 0.0 }
             )
         }
