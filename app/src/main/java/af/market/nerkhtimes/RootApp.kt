@@ -26,6 +26,7 @@ private val BOTTOM_TABS = listOf(
     BottomTab(NavRoutes.HOME,     Icons.Default.Home,             R.string.menu_home),
     BottomTab(NavRoutes.CURRENCY, Icons.Default.CurrencyExchange, R.string.menu_currency),
     BottomTab(NavRoutes.METALS,   Icons.Default.Paid,             R.string.tab_metals),
+    BottomTab(NavRoutes.FOOD,     Icons.Default.Restaurant,       R.string.tab_food),
     BottomTab(NavRoutes.CHART,    Icons.Default.ShowChart,        R.string.btn_chart)
 )
 
