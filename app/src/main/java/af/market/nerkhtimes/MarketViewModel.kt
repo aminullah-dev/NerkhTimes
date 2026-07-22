@@ -132,9 +132,10 @@ class MarketViewModel(app: Application) : AndroidViewModel(app) {
         val prevPrices = repo.previousPrices()
         return raw.map { city ->
             city.copy(
+                city_name = city.city_name.cleanDisplay(),
                 items = city.items
                     .map { item ->
-                        item.mergeCatalog(useFarsi).copy(
+                        item.sanitized().mergeCatalog(useFarsi).copy(
                             prev_price = prevPrices[CacheManager.priceKey(city.city_id, item.key)] ?: 0.0
                         )
                     }
@@ -197,6 +198,21 @@ class MarketViewModel(app: Application) : AndroidViewModel(app) {
         candlesJob?.cancel()
     }
 }
+
+/**
+ * Cleans a display string coming from the sheet:
+ * - underscores → spaces (Telegram entries use "کیلو_ګرام" because the bot
+ *   can't take spaces in a token)
+ * - strips stray double-quotes (CSV escaping leaks """یورو""" into the feed)
+ * Keys are NEVER passed through this — only human-readable names/units.
+ */
+private fun String.cleanDisplay(): String =
+    replace('_', ' ')
+        .replace("\"", "")
+        .trim()
+
+private fun MarketItem.sanitized(): MarketItem =
+    copy(name_ps = name_ps.cleanDisplay(), unit_ps = unit_ps.cleanDisplay())
 
 private fun MarketItem.mergeCatalog(useFarsi: Boolean = false): MarketItem {
     val meta = MarketCatalog.metaByKey[key.lowercase()] ?: return this

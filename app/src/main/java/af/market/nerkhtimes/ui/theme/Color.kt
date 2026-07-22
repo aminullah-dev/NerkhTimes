@@ -33,6 +33,7 @@ val FoodGreen          = Color(0xFF388E3C)  // green-700   → food
 val FuelOrange         = Color(0xFFE64A19)  // deep-orange-700 → fuel
 val CurrencyTeal       = Color(0xFF00897B)  // teal-600    → currency
 val ChartBlue          = Color(0xFF1565C0)  // blue-800    → chart
+val CryptoIndigo       = Color(0xFF3949AB)  // indigo-600  → crypto
 
 /** Returns a deterministic accent colour for a market group. */
 fun categoryAccentColor(group: String): Color = when (group) {
@@ -41,5 +42,6 @@ fun categoryAccentColor(group: String): Color = when (group) {
     "food"     -> FoodGreen
     "fuel"     -> FuelOrange
     "currency" -> CurrencyTeal
+    "crypto"   -> CryptoIndigo
     else       -> Color(0xFF607D8B)
 }

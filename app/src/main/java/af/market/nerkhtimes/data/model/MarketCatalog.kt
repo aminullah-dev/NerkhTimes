@@ -18,6 +18,9 @@ object MarketCatalog {
         Meta("usd",  "currency", "دالر",  AFN, name_fa = "دلار"),
         Meta("eur",  "currency", "یورو",  AFN, name_fa = "یورو"),
         Meta("pkr",  "currency", "کلدار", AFN, name_fa = "کلدار"),
+        Meta("gbp",  "currency", "پاوند", AFN, name_fa = "پوند"),
+        Meta("sar",  "currency", "ریال",  AFN, name_fa = "ریال سعودی"),
+        Meta("aed",  "currency", "درهم",  AFN, name_fa = "درهم"),
 
         // ── Gold ──────────────────────────────────────────────────────────────
         Meta("gold_18k",      "gold", "سره زر ۱۸ عیار",  AFN,     name_fa = "طلای ۱۸ عیار"),
@@ -25,6 +28,12 @@ object MarketCatalog {
         Meta("gold_24k",      "gold", "سره زر ۲۴ عیار",  AFN,     name_fa = "طلای ۲۴ عیار"),
         Meta("gold_per_gram", "gold", "سره زر فی ګرام",  "ګرام",  name_fa = "طلا فی‌گرام",  unit_fa = "گرام"),
         Meta("gold_per_tola", "gold", "سره زر فی توله",  "توله",  name_fa = "طلا فی‌تولہ",  unit_fa = "تولہ"),
+        Meta("silver",        "gold", "نقره خالص",       AFN,     name_fa = "نقره خالص"),
+
+        // ── Crypto ────────────────────────────────────────────────────────────
+        Meta("btc", "crypto", "بیټ کوین", AFN, name_fa = "بیت‌کوین"),
+        Meta("eth", "crypto", "اېتریم",   AFN, name_fa = "اتریوم"),
+        Meta("usdt", "crypto", "تیدر",    AFN, name_fa = "تتر"),
 
         // ── Stones ────────────────────────────────────────────────────────────
         Meta("stone_diamond",   "stones", "الماس",    AFN,       name_fa = "الماس"),
@@ -102,8 +111,9 @@ object MarketCatalog {
     }
 
     fun allKeysForChart(): List<String> = listOf(
-        "usd", "eur", "pkr",
-        "gold_per_gram", "gold_per_tola",
+        "usd", "eur", "pkr", "gbp", "sar", "aed",
+        "gold_per_gram", "gold_per_tola", "silver",
+        "btc",
         "fuel_petrol", "fuel_diesel"
     )
 }

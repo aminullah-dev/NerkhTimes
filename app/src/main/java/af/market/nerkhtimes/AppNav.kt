@@ -28,6 +28,7 @@ fun AppNav(
         composable(NavRoutes.GEMS)     { GemsScreen(padding = padding, vm = vm) }
         composable(NavRoutes.FOOD)     { FoodScreen(padding = padding, vm = vm) }
         composable(NavRoutes.SON)      { SonScreen(padding = padding, vm = vm) }
+        composable(NavRoutes.CRYPTO)   { CryptoScreen(padding = padding, vm = vm) }
         composable(NavRoutes.CHART)    { ChartScreen(padding = padding, vm = vm) }
         composable(NavRoutes.ABOUT)    { AboutScreen(padding = padding) }
         composable(NavRoutes.CONTACT)  { ContactScreen(padding = padding) }

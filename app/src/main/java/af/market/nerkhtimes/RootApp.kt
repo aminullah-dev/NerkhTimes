@@ -79,6 +79,7 @@ fun RootApp(vm: MarketViewModel) {
         NavRoutes.GEMS     -> stringResource(R.string.btn_gems)
         NavRoutes.FOOD     -> stringResource(R.string.btn_food)
         NavRoutes.SON      -> stringResource(R.string.btn_son)
+        NavRoutes.CRYPTO   -> stringResource(R.string.btn_crypto)
         NavRoutes.CHART    -> stringResource(R.string.btn_chart)
         NavRoutes.LANGUAGE -> stringResource(R.string.menu_language)
         else               -> stringResource(R.string.app_name)

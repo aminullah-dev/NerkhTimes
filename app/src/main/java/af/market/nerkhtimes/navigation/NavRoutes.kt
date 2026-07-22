@@ -7,6 +7,7 @@ object NavRoutes {
     const val GEMS     = "gems"
     const val FOOD     = "food"
     const val SON      = "son"
+    const val CRYPTO   = "crypto"
     const val CHART    = "chart"
     const val ABOUT    = "about"
     const val CONTACT  = "contact"

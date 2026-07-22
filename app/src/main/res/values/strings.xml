@@ -11,6 +11,7 @@
     <string name="btn_gems">Precious Stones</string>
     <string name="btn_food">Food Prices</string>
     <string name="btn_son">Fuel Prices</string>
+    <string name="btn_crypto">Cryptocurrency</string>
     <string name="btn_chart">Chart</string>
 
     <string name="menu_home">Home</string>

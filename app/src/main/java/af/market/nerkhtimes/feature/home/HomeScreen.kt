@@ -63,6 +63,7 @@ fun HomeScreen(
         CategoryItem(stringResource(R.string.btn_gems),      Icons.Default.Diamond,          NavRoutes.GEMS,     StonePurple),
         CategoryItem(stringResource(R.string.btn_food),      Icons.Default.Restaurant,       NavRoutes.FOOD,     FoodGreen),
         CategoryItem(stringResource(R.string.btn_son),       Icons.Default.LocalGasStation,  NavRoutes.SON,      FuelOrange),
+        CategoryItem(stringResource(R.string.btn_crypto),    Icons.Default.CurrencyBitcoin,  NavRoutes.CRYPTO,   CryptoIndigo),
         CategoryItem(stringResource(R.string.btn_chart),     Icons.Default.ShowChart,        NavRoutes.CHART,    ChartBlue)
     )
 
